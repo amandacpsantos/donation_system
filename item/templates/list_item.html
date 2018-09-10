@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Hover Rows
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
+                        <th>Categoria</th>
+                        <th>Doador</th>
+                        <th></th>
+                        <th></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in itens %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.status }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.donor }}</td>
+                        <td>
+                            <a href="#" class="active">
+                                <i class="fa fa-trash-o fa-fw"></i>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'update_item' item.id %}" class="active">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+
+{% endblock %}
