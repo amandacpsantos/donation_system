@@ -18,6 +18,7 @@ from django.contrib.auth import views as auth_views
 
 from django.urls import path, include
 from item import urls as item_urls
+from user import urls as user_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +26,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     path('',auth_views.LoginView.as_view(), name='login'),
-    path('dashboard/', include(item_urls))
+    path('dashboard/', include(item_urls)),
+    path('conta/', include(user_urls))
 
 ]

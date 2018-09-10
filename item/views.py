@@ -30,8 +30,10 @@ def new_item(request):
 
 
 @login_required
-def delete_item(request):
-    pass
+def delete_item(request, id):
+    item = get_object_or_404(Item, pk=id)
+    item.delete()
+    return redirect('list_item')
 
 
 @login_required
