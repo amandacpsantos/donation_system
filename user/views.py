@@ -8,7 +8,9 @@ def new_user(request):
     form = UserForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.groups = 1
+            user.save()
             return redirect('login')
 
     return render(request, 'new_user.html', {'form': form})
