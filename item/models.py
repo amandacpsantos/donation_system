@@ -25,7 +25,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=45)
-    description = models.CharField(max_length=200)
+    description = models.TextField(max_length=200)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     donor = models.ForeignKey(

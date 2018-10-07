@@ -33,15 +33,12 @@
 
 </head>
 
-<body>
+<body style="background-color: white">
 
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">CADASTRAR</h3>
-                    </div>
+            <div class="col-md-6 col-md-offset-3">
+                <div class="login-panel">
 
 
                     <div class="panel-body">
@@ -49,29 +46,34 @@
 
                             {% csrf_token %}
 
+
                             <div class="form-group">
                                 <label for="id_username">Usuário:</label>
-                                {{form.username}}
+                                {{ form.username.errors }}
+                                <input id="id_username" type="text" name="username" maxlength="100" class="form-control" placeholder="Usuário" required>
                             </div>
 
                             <div class="form-group">
+                                {{ form.email.errors }}
                                 <label for="id_email">Email:</label>
-                                {{form.email}}
+                                <input id="id_email" type="email" name="email" maxlength="100" class="form-control" placeholder="E-mail" required>
                             </div>
 
                             <div class="form-group">
+                                {{ form.password1.errors }}
                                 <label for="id_password1">Senha:</label>
-                                {{form.password1}}
+                                <input id="id_password1" type="password" name="password1" minlength="8" class="form-control" placeholder="Senha" required>
                                 <p class="help-block">Mínimo 8 caracteres.</p>
                             </div>
 
                             <div class="form-group">
+                                {{ form.password2.errors }}
                                 <label for="id_password2">Confirme a senha:</label>
-                                {{form.password2}}
+                                <input id="id_password2" type="password" name="password2" minlength="8" class="form-control" placeholder="Senha" required>
                                 <p class="help-block">Digite novamente sua senha.</p>
                             </div>
 
-                            <button type="submit" class="btn btn-lg btn-success btn-block">SALVAR</button>
+                            <button type="submit"  class="btn btn-success" >Cadastrar</button>
 
                         </form>
                     </div>

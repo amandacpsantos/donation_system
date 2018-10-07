@@ -19,13 +19,14 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from item import urls as item_urls
 from user import urls as user_urls
+from .forms import LoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', auth_views.LoginView.as_view(), {'authentication_form':LoginForm},name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
-    path('',auth_views.LoginView.as_view(), name='login'),
+    path('',auth_views.LoginView.as_view(), {'authentication_form':LoginForm}, name='login'),
     path('dashboard/', include(item_urls)),
     path('conta/', include(user_urls))
 
