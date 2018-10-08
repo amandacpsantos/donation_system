@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 class Item(models.Model):
     name = models.CharField(max_length=45)
     description = models.TextField(max_length=200)
-    status = models.CharField(max_length=45, default='DISPONIVEL')
+    status = models.CharField(max_length=45, default='Disponível', null=True, blank=True)
     category = models.CharField(max_length=45, null=True, blank=True)
     donor = models.ForeignKey(
         get_user_model(),

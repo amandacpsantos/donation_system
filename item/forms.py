@@ -5,7 +5,6 @@ from .models import Item, Donation
 
 
 class ItemForm(ModelForm):
-
     class Meta:
         model = Item
         fields = '__all__'
@@ -13,7 +12,6 @@ class ItemForm(ModelForm):
 
 
 class DonationForm(ModelForm):
-
     class Meta:
         model = Donation
         fields = '__all__'

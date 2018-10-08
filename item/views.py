@@ -65,7 +65,8 @@ def make_donation(request, id_item):
     return redirect('list_item')
 
 
-
+@login_required()
 def list_donation(request):
-    pass
-
+    donations = Donation.objects.all()
+    print(donations)
+    return render(request, "list_item.html", {'donations': donations})
