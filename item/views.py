@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ItemForm
 from django.contrib.auth import get_user_model, get_user
-from .models import Item
+from .models import Item, Donation
 
 
 
@@ -46,3 +46,26 @@ def update_item(request, id):
         return redirect('list_item')
     else:
         return render(request, 'new_item.html', {'form': form})
+
+
+def load_category(request):
+    category_id = request.GET.get('category')
+    categories = Category.objects.filter(category_id=category_id).order_by('type')
+    return render(request, 'list_item.html', {'categories': categories})
+
+
+
+def make_donation(request, id_item):
+    Item.objects.filter(pk=id_item).update(status='EM_DOACAO')
+    item = Item.objects.get(pk=id_item)
+
+    donation = Donation(item=item)
+    donation.save()
+
+    return redirect('list_item')
+
+
+
+def list_donation(request):
+    pass
+
