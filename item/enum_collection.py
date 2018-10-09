@@ -1,19 +1,18 @@
-''''
-#STATUS
-CADASTRADO
-DISPONÍVEL
-RESERVADO
-DOADO
+from enum import Enum
 
-------------
 
-#CATEGORIAS
-VESTUÁRIO
-MÓVEIS
-ELETRÔNICOS/ELETRODOMÉSTICOS
-ALIMENTOS
-UTENSÍLIOS DOMÉSTICOS
-LIVRARIA/PAPELARIA
-TRABALHO VOLUNTÁRIO
+class Status(Enum):
+    REGISTERED = 'Cadastrado'
+    AVAILABLE = 'Disponível'
+    RESERVED = 'Reservado'
+    DONATED = 'Doado'
 
-'''
+
+class Categoria(Enum):
+    CLOTHING = 'Vestuário'
+    FURNITURE = 'Móveis'
+    ELETRO = 'Eletrônicos/Eletrodomésticos'
+    FOOD = 'Alimentos'
+    HOUSEHOLD = 'Utensílios Domésticos'
+    BOOK_OFFICE = 'Livraria/Papelaria'
+    VOLUNTEER_WORK = 'Trabalho Voluntário'
