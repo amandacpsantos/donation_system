@@ -10,6 +10,7 @@ class Item(models.Model):
     donor = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
+        editable=False,
     )
 
     def __str__(self):
@@ -18,9 +19,8 @@ class Item(models.Model):
     class Meta:
         verbose_name_plural = "Itens"
 
-
 class Donation(models.Model):
-    date = models.DateField(auto_now=True)
+    date = models.DateField(auto_now=True, editable=False)
     taker = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, editable=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, editable=False)
 
@@ -31,3 +31,10 @@ class Donation(models.Model):
     class Meta:
         verbose_name_plural = "Doações"
 
+
+class Message(models.Model):
+    #from_email = models.EmailField()
+    to_email = models.EmailField()
+    subject = models.TextField(max_length=45)
+    date = models.DateTimeField(auto_now=True)
+    body = models.TextField(max_length=500, null=True, blank=True)

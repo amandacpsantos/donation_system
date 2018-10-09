@@ -1,8 +1,14 @@
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import ItemForm
+
+from donation.settings import EMAIL_HOST_USER
+from .forms import ItemForm, MessageForm
 from django.contrib.auth import get_user_model, get_user
 from .models import Item, Donation
+from django.core.mail import send_mail
+
 
 
 
@@ -13,6 +19,7 @@ def dashboard(request):
 
 @login_required()
 def list_item(request):
+    print(get_user(request))
     itens = Item.objects.all().filter(donor_id=get_user(request).pk)
     return render(request, "list_item.html", {'itens': itens})
 
@@ -54,7 +61,7 @@ def load_category(request):
     return render(request, 'list_item.html', {'categories': categories})
 
 
-
+@login_required()
 def make_donation(request, id_item):
     Item.objects.filter(pk=id_item).update(status='EM_DOACAO')
     item = Item.objects.get(pk=id_item)
@@ -69,4 +76,43 @@ def make_donation(request, id_item):
 def list_donation(request):
     donations = Donation.objects.all()
     print(donations)
-    return render(request, "list_item.html", {'donations': donations})
+    return render(request, "list_donation.html", {'donations': donations})
+
+
+@login_required()
+def send_message(request, id_item):
+    item = Item.objects.get(pk=id_item)
+
+    print(item.donor)
+
+    send_mail(
+        'TESTE LAB',
+        'TESTE',
+        EMAIL_HOST_USER,
+        ['contatoacps@gmail.com'],
+        fail_silently=False,
+    )
+    return HttpResponseRedirect('/dashboard/')
+
+
+def open_message(request):
+    return render(request, 'send_message.html')
+
+@login_required
+def new_message(request):
+    form = MessageForm(request.POST or None)
+    if form.is_valid():
+        message_fields = form.save(commit=False)
+
+        send_mail(
+            message_fields.subject,
+            message_fields.body,
+            EMAIL_HOST_USER,
+            [message_fields.to_email],
+            fail_silently=False,
+        )
+
+        return HttpResponseRedirect('/dashboard/')
+
+    else:
+        return render(request, 'send_message.html', {'form':form})

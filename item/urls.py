@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 
 from django.urls import path, include
 from .views import new_item, update_item, delete_item, list_item, \
-    dashboard, load_category, make_donation, list_donation
+    dashboard, load_category, make_donation, list_donation, send_message, open_message, new_message
 
 
 urlpatterns = [
@@ -16,5 +16,7 @@ urlpatterns = [
 
     path('make_donation/<int:id_item>', make_donation, name='make_donation'),
     path('list_donation/', list_donation, name='list_donation'),
+    path('send_message/<int:id_item>', send_message, name='send_message' ),
+    path('open_message/', open_message, name='open_message')
 
 ]

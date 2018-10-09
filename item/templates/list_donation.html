@@ -20,11 +20,9 @@
                     <tr>
                         <th>Nome</th>
                         <th>Descrição</th>
-                        <th>Categoria</th>
                         <th>Doador</th>
-                        <th>Botão Ver</th>
-                        <th>Botão registrar interesse ou excluir</th>
-                        <th></th>
+                        <th>VER</th>
+                        <th>BOTAO</th>
                     </tr>
                     </thead>
 
@@ -33,6 +31,35 @@
                     {% for donation in donations %}
                     <tr>
                         <td>{{ donation.item.name }}</td>
+                        <td>{{ donation.item.description }}</td>
+                        <td>{{ donation.item.donor }}</td>
+
+                        <td>
+                            <i class="fa  fa-search-plus fa-fw" title="Ver"></i>
+                        </td>
+
+
+                        {% if donation.item.donor == user %}
+                             <td>
+                                <a href="{% url 'update_item' donation.item.id %}" class="active">
+                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
+                                </a>
+                             </td>
+                        {% endif %}
+
+                         {% if donation.item.donor != user %}
+                             <td>
+                                 <a href="{% url 'send_message' donation.item.id %}" class="active">
+                                    <i class="fa  fa-send-o fa-fw" title="Enviar interesse"></i>
+                                 </a>
+
+                             </td>
+                        {% endif %}
+
+
+
+
+
                     </tr>
                     {% endfor %}
 
@@ -57,6 +84,9 @@
             });
         });
     </script>
+
+
+
 
 
 {% endblock %}
