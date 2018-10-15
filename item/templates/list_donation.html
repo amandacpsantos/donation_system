@@ -49,7 +49,7 @@
 
                          {% if donation.item.donor != user %}
                              <td>
-                                 <a href="{% url 'send_message' donation.item.id %}" class="active">
+                                 <a href="{% url 'send_message' donation.item.id donation.id %}" class="active">
                                     <i class="fa  fa-send-o fa-fw" title="Enviar interesse"></i>
                                  </a>
 

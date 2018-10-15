@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -6,9 +5,12 @@ from django.contrib.auth.decorators import login_required
 from donation.settings import EMAIL_HOST_USER
 from .forms import ItemForm, MessageForm
 from django.contrib.auth import get_user_model, get_user
+from django.contrib.auth.models import User
 from .models import Item, Donation
+from user.models import Person
 from django.core.mail import send_mail
 from .enum_collection import STATUS_CHOICES
+from django.db.models import Q
 
 
 @login_required()
@@ -54,12 +56,6 @@ def update_item(request, id):
         return render(request, 'new_item.html', {'form': form})
 
 
-def load_category(request):
-    category_id = request.GET.get('category')
-    categories = Category.objects.filter(category_id=category_id).order_by('type')
-    return render(request, 'list_item.html', {'categories': categories})
-
-
 @login_required()
 def make_donation(request, id_item):
     # Mudar status do item
@@ -76,51 +72,72 @@ def make_donation(request, id_item):
 @login_required()
 def list_donation(request):
     donations = Donation.objects.filter(item__status=STATUS_CHOICES[1][0])
-    print(donations)
     return render(request, "list_donation.html", {'donations': donations})
 
 
 @login_required()
 def historic_donation(request):
-    donations = Donation.objects.filter(taker_id=get_user(request).pk, item__donor_id=get_user(request).pk)
-    print(donations)
+    donations = Donation.objects.filter(Q(taker_id=get_user(request).pk) | Q(item__donor_id=get_user(request).pk))
     return render(request, "historic_donation.html", {'donations': donations})
 
+
+def check_donation(request):
+    pass
+
+def cancel_donation(request):
+    pass
+
+
 @login_required()
-def send_message(request, id_item):
-    item = Item.objects.get(pk=id_item)
+def send_message(request, id_item, id_donation):
 
-    print(item.donor)
+    # DADOS DO ITEM
+    query_item = Item.objects.filter(pk=id_item)
+    values_item = list(query_item.values())
 
-    send_mail(
-        'TESTE LAB',
-        'TESTE',
-        EMAIL_HOST_USER,
-        ['contatoacps@gmail.com'],
-        fail_silently=False,
-    )
+    id_donor = values_item[0].get("donor_id", None)
+    name_item = values_item[0].get("name", None)
+    print(name_item)
+
+    # DADOS DO INTERESSADO
+    main_user = User.objects.filter(pk=get_user(request).pk)
+    values_user = list(main_user.values())
+    print(values_user)
+    name_user = values_user[0].get("username", None)
+    email_user = values_user[0].get("email", None)
+    print(name_user)
+    print(email_user)
+
+    # DADOS DO DONO DO ITEM
+    query_donor = User.objects.filter(pk=id_donor)
+    values_donor = list(query_donor.values())
+    email_donor = values_donor[0].get("email", None)
+    name_donor = values_donor[0].get("username", None)
+    print(name_donor)
+    print(email_donor)
+
+    # DADOS PARA O EMAIL
+    from_email = EMAIL_HOST_USER
+    to_email = email_donor
+    subject_email = "Alguém tem interesse na doação!"
+    body_email = "Olá {}, alguém está interessado no item '{}'. Vocês podem trocar e-mails e combinar como será a doação.\n" \
+                 "Dados para contados:\n" \
+                 "Nome: {}\n" \
+                 "Email: {}\n\n" \
+                 "Caso a doação for concluída, não esqueça em finalizá-la." \
+                 "".format(name_donor, name_item, name_user, email_user)
+
+    success = send_mail(
+        subject_email,
+        body_email,
+        from_email,
+        [to_email],
+        fail_silently=False)
+
+    if success == 1:
+        query_item.update(status=STATUS_CHOICES[2][0])
+        Donation.objects.filter(pk=id_donation).update(taker_id=get_user(request).pk)
+        return HttpResponseRedirect('/dashboard/historic_donation/')
+
     return HttpResponseRedirect('/dashboard/')
 
-
-def open_message(request):
-    return render(request, 'send_message.html')
-
-
-@login_required
-def new_message(request):
-    form = MessageForm(request.POST or None)
-    if form.is_valid():
-        message_fields = form.save(commit=False)
-
-        send_mail(
-            message_fields.subject,
-            message_fields.body,
-            EMAIL_HOST_USER,
-            [message_fields.to_email],
-            fail_silently=False,
-        )
-
-        return HttpResponseRedirect('/dashboard/')
-
-    else:
-        return render(request, 'send_message.html', {'form': form})

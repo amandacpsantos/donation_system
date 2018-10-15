@@ -20,9 +20,10 @@
                     <tr>
                         <th>Nome</th>
                         <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
                         <th>Dono</th>
                         <th>Recebedor</th>
-                        <th>VER</th>
                         <th>BOTAO</th>
                     </tr>
                     </thead>
@@ -33,8 +34,41 @@
                     <tr>
                         <td>{{ donation.item.name }}</td>
                         <td>{{ donation.item.description }}</td>
+                        <td>{{ donation.item.category }}</td>
+                        <td>{{ donation.item.status }}</td>
                         <td>{{ donation.item.donor }}</td>
-                        <td>{{ donation.taker }}</td>
+
+
+                        {% if donation.taker == None %}
+                              <td> - </td>
+                        {% endif %}
+
+                        {% if donation.taker != None %}
+                              <td>{{ donation.taker }}</td>
+                        {% endif %}
+
+
+
+                        {% if donation.item.donor == user %}
+                            <td>
+                                <a href="{% url 'check_donation' donation.item.id %}" class="active">
+                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
+                                </a>
+                             </td>
+                        {% endif %}
+
+                        {% if donation.item.donor != user %}
+                              <td>
+                                <a href="{% url 'cancel_donation' donation.item.id %}" class="active">
+                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
+                                </a>
+                             </td>
+                        {% endif %}
+
+
+
+
+
 
                         <td>
                             <i class="fa  fa-search-plus fa-fw" title="Ver"></i>
@@ -51,7 +85,7 @@
 
                          {% if donation.item.donor != user %}
                              <td>
-                                 <a href="{% url 'send_message' donation.item.id %}" class="active">
+                                 <a href="{% url 'update_item' donation.item.id %}" class="active">
                                     <i class="fa  fa-send-o fa-fw" title="Enviar interesse"></i>
                                  </a>
 
