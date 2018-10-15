@@ -10,11 +10,9 @@ from .models import Item, Donation
 from django.core.mail import send_mail
 
 
-
-
 @login_required()
 def dashboard(request):
-     return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html')
 
 
 @login_required()
@@ -33,7 +31,7 @@ def new_item(request):
         item.save()
         return redirect('dashboard')
     else:
-        return render(request, 'new_item.html', {'form':form})
+        return render(request, 'new_item.html', {'form': form})
 
 
 @login_required
@@ -98,6 +96,7 @@ def send_message(request, id_item):
 def open_message(request):
     return render(request, 'send_message.html')
 
+
 @login_required
 def new_message(request):
     form = MessageForm(request.POST or None)
@@ -115,4 +114,4 @@ def new_message(request):
         return HttpResponseRedirect('/dashboard/')
 
     else:
-        return render(request, 'send_message.html', {'form':form})
+        return render(request, 'send_message.html', {'form': form})
