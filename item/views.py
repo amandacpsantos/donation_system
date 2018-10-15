@@ -62,9 +62,11 @@ def load_category(request):
 
 @login_required()
 def make_donation(request, id_item):
+    # Mudar status do item
     Item.objects.filter(pk=id_item).update(status=STATUS_CHOICES[1][0])
     item = Item.objects.get(pk=id_item)
 
+    # Criar doação e salvar
     donation = Donation(item=item)
     donation.save()
 
