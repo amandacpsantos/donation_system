@@ -2,7 +2,23 @@
 
 {% block content %}
 
-PÁGINA DO PERFIL
+    <h2>PÁGINA DO PERFIL</h2>
+
+    <div>
+        Username: {{ user }} <br>
+        Nome: {{ first_name }} {{ last_name }}<br>
+        Email: {{ email }} <br>
+    </div>
+
+    <div class="modal-footer">
+        <a href="{% url 'update_user' %}">
+            <button class="btn btn-primary">Editar usuário</button>
+        </a>
+
+        <a href="{% url 'delete_user' %}">
+            <button type="submit" class="btn btn-primary">Excluir usuário</button>
+        </a>
+    </div>
 
 
 {% endblock %}
