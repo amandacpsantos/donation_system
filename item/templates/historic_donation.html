@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <br>
+    <br>
+
+    <div class="panel-default">
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <input class="form-control" id="searchfield" type="text" placeholder="Search..">
+
+            <br>
+            <br>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Dono</th>
+                        <th>Recebedor</th>
+                        <th>VER</th>
+                        <th>BOTAO</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody id="itemList">
+                    {% for donation in donations %}
+                    <tr>
+                        <td>{{ donation.item.name }}</td>
+                        <td>{{ donation.item.description }}</td>
+                        <td>{{ donation.item.donor }}</td>
+                        <td>{{ donation.taker }}</td>
+
+                        <td>
+                            <i class="fa  fa-search-plus fa-fw" title="Ver"></i>
+                        </td>
+
+
+                        {% if donation.item.donor == user %}
+                             <td>
+                                <a href="{% url 'update_item' donation.item.id %}" class="active">
+                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
+                                </a>
+                             </td>
+                        {% endif %}
+
+                         {% if donation.item.donor != user %}
+                             <td>
+                                 <a href="{% url 'send_message' donation.item.id %}" class="active">
+                                    <i class="fa  fa-send-o fa-fw" title="Enviar interesse"></i>
+                                 </a>
+
+                             </td>
+                        {% endif %}
+
+
+
+
+
+                    </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#searchfield").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#itemList tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                 });
+            });
+        });
+    </script>
+
+
+
+
+
+{% endblock %}

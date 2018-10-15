@@ -15,7 +15,6 @@ def new_user(request):
 
     return render(request, 'new_user.html', {'form': form})
 
-
 def update_user(request):
     pass
 
@@ -25,5 +24,5 @@ def delete_user(request):
 def list_user(request):
     pass
 
-def profile(request):
-    pass
+def profile_user(request):
+    return render(request, 'profile_user.html')
