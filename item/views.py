@@ -8,6 +8,7 @@ from .forms import ItemForm, MessageForm
 from django.contrib.auth import get_user_model, get_user
 from .models import Item, Donation
 from django.core.mail import send_mail
+from .enum_collection import STATUS_CHOICES
 
 
 @login_required()
@@ -61,7 +62,7 @@ def load_category(request):
 
 @login_required()
 def make_donation(request, id_item):
-    Item.objects.filter(pk=id_item).update(status='EM_DOACAO')
+    Item.objects.filter(pk=id_item).update(status=STATUS_CHOICES[1][0])
     item = Item.objects.get(pk=id_item)
 
     donation = Donation(item=item)
@@ -72,7 +73,7 @@ def make_donation(request, id_item):
 
 @login_required()
 def list_donation(request):
-    donations = Donation.objects.all()
+    donations = Donation.objects.filter(item__status=STATUS_CHOICES[1][0])
     print(donations)
     return render(request, "list_donation.html", {'donations': donations})
 
