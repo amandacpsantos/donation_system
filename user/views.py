@@ -16,7 +16,6 @@ def new_user(request):
 
     return render(request, 'new_user.html', {'form': form})
 
-
 def update_user(request):
     user = get_object_or_404(Person, pk=get_user(request).pk)
     form = UserFormUp(request.POST or None, instance=user)
@@ -36,8 +35,9 @@ def delete_user(request):
 
 def profile_user(request):
     user = list(User.objects.all().filter(id=get_user(request).pk))
-    return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile_user.html', {'user': user})
 
 
 def list_user(request):
     pass
+

@@ -1,6 +1,5 @@
-
 from django.urls import path, include
-from .views import new_user, update_user, delete_user, profile_user, list_user
+from .views import new_user, update_user, delete_user, list_user, profile_user
 
 
 urlpatterns = [
@@ -12,4 +11,5 @@ urlpatterns = [
     path('profile/', profile_user, name='profile_user'),
 
     path('list/', list_user, name='list_user'),
+
 ]

@@ -81,6 +81,12 @@ def list_donation(request):
 
 
 @login_required()
+def historic_donation(request):
+    donations = Donation.objects.filter(taker_id=get_user(request).pk, item__donor_id=get_user(request).pk)
+    print(donations)
+    return render(request, "historic_donation.html", {'donations': donations})
+
+@login_required()
 def send_message(request, id_item):
     item = Item.objects.get(pk=id_item)
 
