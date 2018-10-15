@@ -38,4 +38,7 @@ def list_user(request):
 
 
 def profile_user(request):
-    return render(request, 'profile_user.html')
+    main_user = User.objects.filter(pk=get_user(request).pk)
+    values_user = list(main_user.values('username'))
+    user = values_user[0].get("username", None)
+    return render(request, 'profile_user.html', {'user': user})
