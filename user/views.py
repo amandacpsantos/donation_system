@@ -16,9 +16,10 @@ def new_user(request):
 
     return render(request, 'new_user.html', {'form': form})
 
+
 def update_user(request):
-    user = get_object_or_404(Person, pk=get_user(request).pk)
-    form = UserFormUp(request.POST or None, instance=user)
+    user = get_object_or_404(User, pk=get_user(request).pk)
+    form = UserForm(request.POST or None, instance=user)
 
     if form.is_valid():
         form.save()
@@ -33,12 +34,16 @@ def delete_user(request):
     return redirect('login')
 
 
-def list_user(request):
-    pass
-
-
 def profile_user(request):
     main_user = User.objects.filter(pk=get_user(request).pk)
-    values_user = list(main_user.values('username'))
+    values_user = list(main_user.values('username', 'first_name', 'last_name', 'email'))
     user = values_user[0].get("username", None)
-    return render(request, 'profile_user.html', {'user': user})
+    first_name = values_user[0].get("first_name", None)
+    last_name = values_user[0].get("last_name", None)
+    email = values_user[0].get("email", None)
+    return render(request, 'profile_user.html',
+                  {'user': user, 'first_name': first_name, 'last_name': last_name, 'email': email})
+
+
+def list_user(request):
+    pass
