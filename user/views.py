@@ -33,11 +33,9 @@ def delete_user(request):
     return redirect('login')
 
 
-def profile_user(request):
-    user = list(User.objects.all().filter(id=get_user(request).pk))
-    return render(request, 'profile_user.html', {'user': user})
-
-
 def list_user(request):
     pass
 
+
+def profile_user(request):
+    return render(request, 'profile_user.html')
