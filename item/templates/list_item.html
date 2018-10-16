@@ -76,12 +76,20 @@
                         </td>
 
 
+                        {% if item.status == 'REGISTERED' %}
+                            <td>
+                                <a href="{% url 'make_donation' item.id %}" class="active">
+                                    <i class="fa fa-gittip fa-fw" title="Doar"></i>
+                                </a>
+                            </td>
+                        {% else %}
 
-                        <td>
-                            <a href="{% url 'make_donation' item.id %}" class="active">
-                                <i class="fa fa-gittip fa-fw"></i>
-                            </a>
-                        </td>
+                             <td>
+                                <a href="{% url 'cancel_donation' item.id %}" class="active">
+                                    <i class="fa  fa-ban fa-fw" title="Tirar da doação"></i>
+                                </a>
+                            </td>
+                        {% endif %}
 
 
                     </tr>

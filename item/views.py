@@ -57,6 +57,13 @@ def update_item(request, id):
 
 
 @login_required()
+def cancel_donation(request, id_item):
+    Item.objects.filter(pk=id_item).update(status=STATUS_CHOICES[0][0])
+    Donation.objects.filter(item_id=id_item).delete()
+    return HttpResponseRedirect('/dashboard/list_item/')
+
+
+@login_required()
 def make_donation(request, id_item):
     # Mudar status do item
     Item.objects.filter(pk=id_item).update(status=STATUS_CHOICES[1][0])
@@ -77,16 +84,23 @@ def list_donation(request):
 
 @login_required()
 def historic_donation(request):
-    donations = Donation.objects.filter(Q(taker_id=get_user(request).pk) | Q(item__donor_id=get_user(request).pk))
+    donations = Donation.objects.filter((Q(taker_id=get_user(request).pk) | Q(item__donor_id=get_user(request).pk)) and
+                                        (Q(item__status='RESERVED') | Q(item__status='DONATED')))
     return render(request, "historic_donation.html", {'donations': donations})
 
 
-def check_donation(request):
-    pass
+@login_required()
+def check_donation(request, id_item):
+    Item.objects.filter(pk=id_item).update(status=STATUS_CHOICES[3][0])
+    return HttpResponseRedirect('/dashboard/historic_donation/')
 
-def cancel_donation(request):
-    pass
 
+@login_required()
+def cancel_reservation_donation(request, id_item, id_donation):
+    Item.objects.filter(pk=id_item).update(status=STATUS_CHOICES[1][0])
+    Donation.objects.filter(pk=id_donation).update(taker_id=None)
+
+    return HttpResponseRedirect('/dashboard/historic_donation/')
 
 @login_required()
 def send_message(request, id_item, id_donation):

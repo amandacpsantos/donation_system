@@ -18,13 +18,12 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th>Nome</th>
-                        <th>Descrição</th>
                         <th>Categoria</th>
                         <th>Status</th>
-                        <th>Dono</th>
-                        <th>Recebedor</th>
-                        <th>BOTAO</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -32,68 +31,91 @@
                     <tbody id="itemList">
                     {% for donation in donations %}
                     <tr>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ donation.item.name }}</td>
-                        <td>{{ donation.item.description }}</td>
                         <td>{{ donation.item.category }}</td>
                         <td>{{ donation.item.status }}</td>
-                        <td>{{ donation.item.donor }}</td>
-
-
-                        {% if donation.taker == None %}
-                              <td> - </td>
-                        {% endif %}
-
-                        {% if donation.taker != None %}
-                              <td>{{ donation.taker }}</td>
-                        {% endif %}
-
-
-
-                        {% if donation.item.donor == user %}
-                            <td>
-                                <a href="{% url 'check_donation' donation.item.id %}" class="active">
-                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
-                                </a>
-                             </td>
-                        {% endif %}
-
-                        {% if donation.item.donor != user %}
-                              <td>
-                                <a href="{% url 'cancel_donation' donation.item.id %}" class="active">
-                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
-                                </a>
-                             </td>
-                        {% endif %}
-
-
-
-
-
 
                         <td>
-                            <i class="fa  fa-search-plus fa-fw" title="Ver"></i>
+                            <a href="#" class="active">
+                                <i class="fa fa-search-plus fa-fw" title="Ver" data-toggle="modal" data-target="#verItemModal"></i>
+                            </a>
                         </td>
 
+                        <!-- Modal -->
+                        <div class="modal fade" id="verItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{ item.name }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Nome: {{ donation.item.name }}</p>
+                                        <p>Categoria: {{ donation.item.category }}</p>
+                                        <p>Doador: {{ donation.item.donor }}</p>
+                                        <p>Recebedor: {{ donation.taker }}</p>
+                                        <p>Descrição: {{ donation.item.description }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" data-dismiss="modal">
+                                            Fechar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                        {% if donation.item.donor == user %}
-                             <td>
-                                <a href="{% url 'update_item' donation.item.id %}" class="active">
-                                    <i class="fa fa-edit fa-fw" title="Editar"></i>
+
+
+
+
+
+
+
+
+
+
+
+
+                        {% if donation.item.status == 'RESERVED' %}
+
+                            <td>
+                                <a href="{% url 'cancel_reservation_donation' donation.item.id donation.id %}" class="active">
+                                    <i class="fa fa-times fa-fw" title="Cancelar Reserva"></i>
                                 </a>
-                             </td>
-                        {% endif %}
+                            </td>
 
-                         {% if donation.item.donor != user %}
+                            {% if donation.item.donor == user %}
+
+                                <td>
+                                    <a href="{% url 'check_donation' donation.item.id %}" class="active">
+                                        <i class="fa fa-check fa-fw" title="Concluir Doação"></i>
+                                    </a>
+                                </td>
+
+
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+
+
+                        {% else %}
+                            <td>
+                                <a href="#" class="active">
+                                    <i class="fa fa-thumbs-o-down fa-fw" title="Curtir"></i>
+                                </a>
+                            </td>
+
                              <td>
-                                 <a href="{% url 'update_item' donation.item.id %}" class="active">
-                                    <i class="fa  fa-send-o fa-fw" title="Enviar interesse"></i>
-                                 </a>
+                                <a href="#" class="active">
+                                    <i class="fa fa-thumbs-o-up fa-fw" title="Curtir"></i>
+                                </a>
+                            </td>
 
-                             </td>
                         {% endif %}
-
-
-
 
 
                     </tr>

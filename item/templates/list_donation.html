@@ -18,11 +18,12 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th>Nome</th>
-                        <th>Descrição</th>
                         <th>Doador</th>
-                        <th>VER</th>
-                        <th>BOTAO</th>
+                        <th>Categoria</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -30,13 +31,43 @@
                     <tbody id="itemList">
                     {% for donation in donations %}
                     <tr>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ donation.item.name }}</td>
-                        <td>{{ donation.item.description }}</td>
                         <td>{{ donation.item.donor }}</td>
+                        <td>{{ donation.item.category }}</td>
+
 
                         <td>
-                            <i class="fa  fa-search-plus fa-fw" title="Ver"></i>
+                            <a href="#" class="active">
+                                <i class="fa fa-search-plus fa-fw" title="Ver" data-toggle="modal" data-target="#verItemModal"></i>
+                            </a>
                         </td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="verItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{ item.name }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Nome: {{ donation.item.name }}</p>
+                                        <p>Categoria: {{ donation.item.category }}</p>
+                                        <p>Doador: {{ donation.item.donor }}</p>
+                                        <p>Descrição: {{ donation.item.description }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" data-dismiss="modal">
+                                            Fechar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
 
                         {% if donation.item.donor == user %}
@@ -71,6 +102,11 @@
         </div>
         <!-- /.panel-body -->
     </div>
+
+
+
+
+
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
